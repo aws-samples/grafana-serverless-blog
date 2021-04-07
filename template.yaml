@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Using Amazon Managed Service for Grafana to Troubleshoot a Serverless Application
+
+Globals:
+  Function:
+    Runtime: python3.8
+    Handler: app.lambda_handler
+    Tracing: Active
+
+Resources:
+  HttpHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: http_handler/
+      Description: Target for GenerateTrafficFunction
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: HttpHandler
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            RouteSettings:
+              DetailedMetricsEnabled: true
+
+  GenerateTrafficFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generate_traffic/
+      Description: Invokes HttpHandlerFunction in a loop asynchronously
+      Environment:
+        Variables:
+          API_URL: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+          POWERTOOLS_SERVICE_NAME: GenerateTraffic
+      EventInvokeConfig:
+        MaximumRetryAttempts: 0
+      MemorySize: 1024
+      Timeout: 900
+
+Outputs:
+  GenerateTrafficFunction:
+    Description: "Generate Traffic Lambda function name"
+    Value: !Ref GenerateTrafficFunction

@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "amg-blog"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-19oo7pzp0k2f7"
+s3_prefix = "amg-blog"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"

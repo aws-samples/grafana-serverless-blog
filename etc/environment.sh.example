@@ -1,0 +1,5 @@
+#shellcheck shell=sh
+export S3BUCKET=aws-sam-cli-managed-default-samclisourcebucket-xxxxxxxxxxxxx
+export OUTPUT=output.yaml
+export FUNCTION=amg-blog-GenerateTrafficFunction-xxxxxxxxxxxxx
+export API_URL=https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
